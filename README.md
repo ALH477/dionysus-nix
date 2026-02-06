@@ -1,6 +1,6 @@
 # Dionysus Dotfiles - Nix Flake
 
-Nix flake for managing dotfiles with home-manager.
+Nix flake for managing dotfiles with home-manager. Published at: https://github.com/ALH477/dionysus-nix
 
 ## Structure
 
@@ -38,14 +38,14 @@ In your `flake.nix`:
 ```nix
 {
   inputs = {
-    dionysus.url = "github:yourusername/dionysus-nix-dionysus";
+    dionysus.url = "github:ALH477/dionysus-nix";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, dionysus }: {
+  outputs = { self, nixpkgs, home-manager, dionysus, ... }: {
     homeManagerConfigurations."your-username" = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs { system = "x86_64-linux"; };
       modules = [
@@ -60,13 +60,14 @@ In your `flake.nix`:
 }
 ```
 
-### 2. Configure in home.nix
+### 2. Configure in your home.nix
 
 ```nix
 { config, pkgs, ... }:
 {
-  imports = [ ./modules ];  # or use dionysus.homeManagerModules.dionysus
+  imports = [ dionysus.homeManagerModules.dionysus ];
 
+  # Enable specific dionysus modules you want
   dionysus = {
     alacritty.enable = true;
     cava.enable = true;
@@ -90,10 +91,6 @@ In your `flake.nix`:
 
 ```bash
 # Build and activate
-nix run .#home-manager -- switch --flake .#your-username
-
-# Or for development/testing
-nix develop
 home-manager switch --flake .#your-username
 ```
 
@@ -119,7 +116,15 @@ All modules also support a `package` option to override the default package.
 Simply edit files in the `dotfiles/` directory and rebuild:
 
 ```bash
-home-manager switch
+home-manager switch --flake .#your-username
 ```
 
 The configuration will symlink files from this flake to `~/.config/`.
+
+## Pushing Updates
+
+```bash
+git add .
+git commit -m "Describe your changes"
+git push
+```
