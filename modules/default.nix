@@ -1,0 +1,10 @@
+[
+  ./alacritty.nix
+  ./cava.nix
+  ./eww.nix
+  ./hyprland.nix
+  ./neofetch.nix
+  ./rofi.nix
+  ./waybar.nix
+  ./zsh.nix
+]
